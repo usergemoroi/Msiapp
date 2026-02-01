@@ -1,8 +1,9 @@
 #include "MemoryManager.h"
-#include <Psapi.h>
+#include <psapi.h>
 #include <tchar.h>
 #include <algorithm>
 #include <cstring>
+#include <string>
 
 #pragma comment(lib, "psapi.lib")
 
@@ -47,14 +48,14 @@ bool MemoryManager::FindUnityBase() {
     }
 
     for (DWORD i = 0; i < (cbNeeded / sizeof(HMODULE)); i++) {
-        TCHAR szModName[MAX_PATH];
-        if (GetModuleFileNameEx(m_hProcess, hMods[i], szModName, sizeof(szModName) / sizeof(TCHAR))) {
+        wchar_t szModName[MAX_PATH];
+        if (GetModuleFileNameExW(m_hProcess, hMods[i], szModName, sizeof(szModName) / sizeof(wchar_t))) {
             std::wstring moduleName(szModName);
             std::transform(moduleName.begin(), moduleName.end(), moduleName.begin(), ::tolower);
             
-            if (moduleName.find(_T("libunity.so")) != std::wstring::npos || 
-                moduleName.find(_T("unityplayer.dll")) != std::wstring::npos ||
-                moduleName.find(_T("unityplayer")) != std::wstring::npos) {
+            if (moduleName.find(L"libunity.so") != std::wstring::npos ||
+                moduleName.find(L"unityplayer.dll") != std::wstring::npos ||
+                moduleName.find(L"unityplayer") != std::wstring::npos) {
                 MODULEINFO modInfo;
                 if (GetModuleInformation(m_hProcess, hMods[i], &modInfo, sizeof(modInfo))) {
                     m_unityBase = reinterpret_cast<uintptr_t>(modInfo.lpBaseOfDll);
