@@ -20,7 +20,17 @@
 
 Для взаимодействия с игровой логикой необходимо получить статические и динамические адреса ключевых структур данных. Так как игра использует движок Unity, основные классы находятся в библиотеке libunity.so (или libil2cpp.so). Приведенная ниже таблица офсетов является результатом статического и динамического анализа указанной версии.
 
-```в репрщитории
+| Класс / Поле | Офсет | Описание |
+|---|---|---|
+| GameManager (Static Instance) | 0x18 | Указатель на экземпляр в статических полях |
+| PlayerManager (Static Instance) | 0x18 | Указатель в LazySingleton |
+| PlayerManager -> LocalPlayer | 0x68 | Поле <FDBAECBCFCHCAAE>k__BackingField |
+| PlayerManager -> PlayerList | 0x38 | Поле HAHCFEHECFEDHHC (HashSet) |
+| PlayerController -> Health | 0x150 | Поле <GBGDAFDAABGEDCB>k__BackingField |
+| PlayerController -> Team | 0x154 | Поле <BGFGGFFCADDEFCE>k__BackingField |
+| PlayerController -> MovementController | 0x98 | Поле <ECAFDHEFEDHFDAB>k__BackingField |
+| MovementController -> TranslationData | 0xB0 | Поле translationData |
+| TranslationData -> Position | 0x1C | Поле BFCAFBAGDCBGHHB (Vector3) |
 
 2.2. Исходный код загрузчика (Loader.exe)
 
