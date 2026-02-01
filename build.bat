@@ -44,7 +44,7 @@ echo Compiler:
 g++ --version | findstr /i "g++"
 
 REM Create output directory
-if not exist "dist" mkdir dist
+if not exist "Lorer" mkdir Lorer
 
 REM Build Core DLL
 echo.
@@ -58,7 +58,7 @@ if %errorlevel% neq 0 (
     exit /b 1
 )
 
-g++ -shared src\core\MemoryManager.o -o dist\Standoff2Core.dll -static-libgcc -static-libstdc++ -lpsapi
+g++ -shared src\core\MemoryManager.o -o Lorer\Standoff2Core.dll -static-libgcc -static-libstdc++ -lpsapi
 if %errorlevel% neq 0 (
     echo ERROR: Failed to link Standoff2Core.dll
     pause
@@ -70,7 +70,7 @@ echo SUCCESS: Standoff2Core.dll built!
 REM Build Loader EXE
 echo.
 echo =======================================
-echo Building Standoff2Loader.exe
+echo Building lorer.exe
 echo =======================================
 g++ -c src\loader\Loader.cpp -o src\loader\Loader.o -std=c++17 -Wall -O2 -mwindows
 if %errorlevel% neq 0 (
@@ -79,14 +79,14 @@ if %errorlevel% neq 0 (
     exit /b 1
 )
 
-g++ src\loader\Loader.o -o dist\Standoff2Loader.exe -static-libgcc -static-libstdc++ -ladvapi32 -mwindows
+g++ src\loader\Loader.o -o Lorer\lorer.exe -static-libgcc -static-libstdc++ -ladvapi32 -mwindows
 if %errorlevel% neq 0 (
-    echo ERROR: Failed to link Standoff2Loader.exe
+    echo ERROR: Failed to link lorer.exe
     pause
     exit /b 1
 )
 
-echo SUCCESS: Standoff2Loader.exe built!
+echo SUCCESS: lorer.exe built!
 
 REM Create README.txt
 echo.
@@ -98,7 +98,7 @@ echo.
 echo USAGE:
 echo 1. Install BlueStacks 5
 echo 2. Install and run Standoff 2 in BlueStacks
-echo 3. Run Standoff2Loader.exe as Administrator
+echo 3. Run lorer.exe as Administrator
 echo 4. The tool will automatically inject into HD-Player.exe
 echo.
 echo REQUIREMENTS:
@@ -120,16 +120,16 @@ echo OFFSETS UPDATE:
 echo Edit src\core\offsets.h with correct values for your game version
 echo Current version: Standoff 2 v0.37.0
 echo.
-) > dist\README.txt
+) > Lorer\README.txt
 
 echo.
 echo =======================================
 echo Build completed successfully!
 echo =======================================
 echo Output files:
-echo - dist\Standoff2Loader.exe
-echo - dist\Standoff2Core.dll
-echo - dist\README.txt
+echo - Lorer\lorer.exe
+echo - Lorer\Standoff2Core.dll
+echo - Lorer\README.txt
 echo.
 echo Press any key to continue...
 pause >nul

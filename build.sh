@@ -25,7 +25,7 @@ CXX=x86_64-w64-mingw32-g++
 CXXFLAGS="-std=c++17 -Wall -Wextra -O2 -I/usr/x86_64-w64-mingw32/include"
 
 # Create output directory
-mkdir -p dist
+mkdir -p Lorer
 
 echo "Compiler: $($CXX --version | head -n1)"
 echo ""
@@ -36,22 +36,22 @@ echo "Building Standoff2Core.dll"
 echo "=========================================="
 
 $CXX -c src/core/MemoryManager.cpp -o src/core/MemoryManager.o $CXXFLAGS
-$CXX -shared src/core/MemoryManager.o -o dist/Standoff2Core.dll -static-libgcc -static-libstdc++ -lpsapi
+$CXX -shared src/core/MemoryManager.o -o Lorer/Standoff2Core.dll -static-libgcc -static-libstdc++ -lpsapi
 
 # Build Loader EXE
 echo ""
 echo "=========================================="
-echo "Building Standoff2Loader.exe"
+echo "Building lorer.exe"
 echo "=========================================="
 
 $CXX -c src/loader/Loader.cpp -o src/loader/Loader.o $CXXFLAGS -mwindows
-$CXX src/loader/Loader.o -o dist/Standoff2Loader.exe -static-libgcc -static-libstdc++ -ladvapi32 -mwindows
+$CXX src/loader/Loader.o -o Lorer/lorer.exe -static-libgcc -static-libstdc++ -ladvapi32 -mwindows
 
 # Create README
 echo ""
 echo "Creating README.txt..."
 
-cat > dist/README.txt << 'EOF'
+cat > Lorer/README.txt << 'EOF'
 Standoff 2 External Tool v1.0.0
 =================================
 
@@ -59,9 +59,9 @@ USAGE:
 1. Install BlueStacks 5 on Windows
 2. Install and run Standoff 2 in BlueStacks
 3. Copy these files to your Windows machine:
-   - Standoff2Loader.exe
+   - lorer.exe
    - Standoff2Core.dll
-4. Run Standoff2Loader.exe as Administrator
+4. Run lorer.exe as Administrator
 5. The tool will automatically inject into HD-Player.exe
 
 REQUIREMENTS:
@@ -73,13 +73,13 @@ BUILD INSTRUCTIONS (Linux):
 ----------------------------
 1. Install MinGW-w64: sudo apt install mingw-w64
 2. Run: chmod +x build.sh && ./build.sh
-3. Windows binaries will be in ./dist/
+3. Windows binaries will be in ./Lorer/
 
 BUILD INSTRUCTIONS (Windows):
 ------------------------------
 1. Install MinGW-w64: https://www.mingw-w64.org/downloads/
 2. Run build.bat as Administrator
-3. Binaries will be in dist/
+3. Binaries will be in Lorer/
 
 TROUBLESHOOTING:
 - If injection fails, run as Administrator
@@ -103,7 +103,7 @@ Use at your own risk. Game modifications may violate Terms of Service.
 EOF
 
 # Create run script for Windows
-cat > dist/run.bat << 'EOF'
+cat > Lorer/run.bat << 'EOF'
 @echo off
 REM Run Standoff 2 External Tool
 REM Make sure BlueStacks is running
@@ -113,7 +113,7 @@ tasklist /FI "IMAGENAME eq HD-Player.exe" 2>NUL | find /I /N "HD-Player.exe">NUL
 if "%ERRORLEVEL%"=="0" (
     echo BlueStacks found. Proceeding with injection...
     timeout /t 2 /nobreak >nul
-    Standoff2Loader.exe
+    lorer.exe
 ) else (
     echo ERROR: BlueStacks 5 not found!
     echo Please start BlueStacks first, then run this script.
@@ -123,14 +123,14 @@ if "%ERRORLEVEL%"=="0" (
 EOF
 
 # Make files executable (when copied to Windows)
-chmod +x dist/Standoff2Loader.exe 2>/dev/null || true
+chmod +x Lorer/lorer.exe 2>/dev/null || true
 
 echo ""
 echo "=========================================="
 echo "Build completed successfully!"
 echo "=========================================="
-echo "Output files in ./dist/:"
-echo "- Standoff2Loader.exe"
+echo "Output files in ./Lorer/:"
+echo "- lorer.exe"
 echo "- Standoff2Core.dll"
 echo "- README.txt"
 echo "- run.bat"
@@ -138,5 +138,5 @@ echo ""
 echo "Next steps:"
 echo "1. Copy files to Windows machine"
 echo "2. Ensure BlueStacks 5 is running"
-echo "3. Run Standoff2Loader.exe as Administrator"
+echo "3. Run lorer.exe as Administrator"
 echo ""
