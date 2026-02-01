@@ -1,8 +1,9 @@
 #include "MemoryManager.h"
-#include <Psapi.h>
+#include <psapi.h>
 #include <tchar.h>
 #include <algorithm>
 #include <cstring>
+#include <string>
 
 #pragma comment(lib, "psapi.lib")
 
@@ -49,12 +50,21 @@ bool MemoryManager::FindUnityBase() {
     for (DWORD i = 0; i < (cbNeeded / sizeof(HMODULE)); i++) {
         TCHAR szModName[MAX_PATH];
         if (GetModuleFileNameEx(m_hProcess, hMods[i], szModName, sizeof(szModName) / sizeof(TCHAR))) {
+#ifdef UNICODE
             std::wstring moduleName(szModName);
+#else
+            // Convert char* to wchar_t* for MinGW builds
+            int len = strlen(szModName);
+            std::wstring moduleName(len, L' ');
+            for (int j = 0; j < len; j++) {
+                moduleName[j] = static_cast<wchar_t>(static_cast<unsigned char>(szModName[j]));
+            }
+#endif
             std::transform(moduleName.begin(), moduleName.end(), moduleName.begin(), ::tolower);
             
-            if (moduleName.find(_T("libunity.so")) != std::wstring::npos || 
-                moduleName.find(_T("unityplayer.dll")) != std::wstring::npos ||
-                moduleName.find(_T("unityplayer")) != std::wstring::npos) {
+            if (moduleName.find(L"libunity.so") != std::wstring::npos || 
+                moduleName.find(L"unityplayer.dll") != std::wstring::npos ||
+                moduleName.find(L"unityplayer") != std::wstring::npos) {
                 MODULEINFO modInfo;
                 if (GetModuleInformation(m_hProcess, hMods[i], &modInfo, sizeof(modInfo))) {
                     m_unityBase = reinterpret_cast<uintptr_t>(modInfo.lpBaseOfDll);
@@ -217,7 +227,7 @@ bool MemoryManager::GetPlayerPosition(uintptr_t playerPtr, Vector3& outPos) {
         return false;
     }
 
-    uintptr_t translationDataAddress = playerPtr + m_offsets.offset_Player_Controller;
+    uintptr_t translationDataAddress = playerPtr + m_offsets.offset_Player_Position;
     uintptr_t translationData = 0;
     
     if (!ReadMemory(translationDataAddress, &translationData, sizeof(translationData))) {

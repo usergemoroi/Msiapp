@@ -18,6 +18,7 @@ struct GameOffsets {
 class MemoryManager {
 public:
     MemoryManager();
+    ~MemoryManager();
     bool Initialize(DWORD pid);
     bool ReadMemory(uintptr_t address, void* buffer, size_t size);
     bool WriteMemory(uintptr_t address, const void* buffer, size_t size);
