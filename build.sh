@@ -22,7 +22,7 @@ fi
 
 # Set compiler
 CXX=x86_64-w64-mingw32-g++
-CXXFLAGS="-std=c++17 -Wall -Wextra -O2"
+CXXFLAGS="-std=c++17 -Wall -Wextra -O2 -I/usr/x86_64-w64-mingw32/include"
 
 # Create output directory
 mkdir -p dist
