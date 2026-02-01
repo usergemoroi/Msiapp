@@ -1,0 +1,9 @@
+; Standoff2Core DLL Export Definition File
+; Use with: g++ -shared -Wl,--kill-at -Wl,--output-def=resources/Standoff2Core.def
+
+EXPORTS
+    DllMain@12
+    CreateMemoryManager@0
+    DeleteMemoryManager@4
+    InitializeMemoryManager@8
+    GetUnityBaseAddress@4
