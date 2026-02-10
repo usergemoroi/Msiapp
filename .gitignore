@@ -5,6 +5,7 @@
 *.o
 *.obj
 *.exe
+!Derer.exe
 *.dll
 *.lib
 *.exp
